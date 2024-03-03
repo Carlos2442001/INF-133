@@ -8,33 +8,71 @@ estudiantes = [
         "apellido": "García",
         "carrera": "Ingeniería de Sistemas",
     },
+     {
+        "id": 1,
+        "nombre": "Pedrito",
+        "apellido": "García",
+        "carrera": "Ingeniería de Sistemas",
+    },
+    
+    {
+        "id": 2,
+        "nombre": "Pepe",
+        "apellido": "Zamora",
+        "carrera": "Seguridad de la Informacion",
+    },
+    {
+        "id": 3,
+        "nombre": "David",
+        "apellido": "Mamani",
+        "carrera": "Seguridad de la Informacion",
+    },
+     {
+        "id": 4,
+        "nombre": "Fabricio",
+        "apellido": "Quispe",
+        "carrera": "Ingeniería de Sistemas",
+    },
+    
+    {
+        "id": 5,
+        "nombre": "Ariel",
+        "apellido": "Quizaya",
+        "carrera": "Seguridad de la Informacion",
+    },
 ]
-
+carreras = ["Ingeniería Informática", "Seguridad de la Informacion","Economia"]
 
 class RESTRequestHandler(BaseHTTPRequestHandler):
     def do_GET(self):
-        if self.path == "/estudiantes":
-            self.send_response(200)
-            self.send_header("Content-type", "application/json")
-            self.end_headers()
-            self.wfile.write(json.dumps(estudiantes).encode("utf-8"))
-        elif self.path.startswith("/estudiantes/"):
-            id = int(self.path.split("/")[-1])
-            estudiante = next(
-                (estudiante for estudiante in estudiantes if estudiante["id"] == id),
-                None,
-            )
-            if estudiante:
+            if self.path == "/estudiantes":
                 self.send_response(200)
                 self.send_header("Content-type", "application/json")
                 self.end_headers()
-                self.wfile.write(json.dumps(estudiante).encode("utf-8"))
+                self.wfile.write(json.dumps(carreras).encode("utf-8"))
 
-        else:
-            self.send_response(404)
-            self.send_header("Content-type", "application/json")
-            self.end_headers()
-            self.wfile.write(json.dumps({"Error": "Ruta no existente"}).encode("utf-8"))
+            elif self.path.startswith("/estudiantes/carreras"):
+                self.send_response(200)
+                self.send_header("Content-type", "application/json")
+                self.end_headers()
+                self.wfile.write(json.dumps(carreras).encode("utf-8"))
+
+            elif self.path.startswith("/estudiantes/"):
+                id = int(self.path.split("/")[-1])
+                estudiante = next(
+                    (estudiante for estudiante in estudiantes if estudiante["id"] == id),
+                    None,
+                )
+                if estudiante:
+                    self.send_response(200)
+                    self.send_header("Content-type", "application/json")
+                    self.end_headers()
+                    self.wfile.write(json.dumps(estudiante).encode("utf-8"))
+            else:
+                self.send_response(404)
+                self.send_header("Content-type", "application/json")
+                self.end_headers()
+                self.wfile.write(json.dumps({"Error": "Ruta no existente"}).encode("utf-8"))
 
     def do_POST(self):
         if self.path == "/estudiantes":
